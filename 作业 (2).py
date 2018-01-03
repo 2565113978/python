@@ -1,0 +1,32 @@
+# -*- coding:utf-8 -*-
+import urllib
+import urllib2
+import re
+
+
+
+user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
+headers = { 'User-Agent' : user_agent }
+ 
+page = 1
+url = 'http://www.doc88.com/b-list.html'
+try:
+    request = urllib2.Request(url, headers=headers)
+    response = urllib2.urlopen(request)
+    html = response.read().decode('utf-8')
+except urllib2.URLError, e:
+    if hasattr(e,"code"):
+        print e.code
+    if hasattr(e,"reason"):
+        print e.reason
+
+content_pattern = re.compile('<div class="corpus-intro">.*?<h4><.*?target="_blank">(.*?)</a>', re.S)
+content_list = re.findall(content_pattern, html)
+for item in content_list:
+    print item
+   
+content_pattern = re.compile('<div class="corpus-intro">.*?<p><.*?target="_blank">(.*?)</a></p>', re.S)
+content_list = re.findall(content_pattern, html)
+for item in content_list:
+    print item
+   
